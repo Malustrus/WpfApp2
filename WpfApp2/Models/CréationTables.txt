@@ -1,0 +1,48 @@
+﻿CREATE TABLE [dbo].[Result] (
+    [Process_ID] INT NOT NULL,
+    [Position]   INT NOT NULL,
+    [Data1]      INT NULL,
+    [Data2]      INT NULL,
+    [Data3]      INT NULL,
+    CONSTRAINT [PK_Result] PRIMARY KEY CLUSTERED ([Process_ID] ASC, [Position] ASC),
+    CONSTRAINT [FK_Process_Result] FOREIGN KEY ([Process_ID]) REFERENCES [dbo].[Process] ([Process_ID])
+);
+
+CREATE TABLE [dbo].[Process] (
+    [Process_ID] INT           IDENTITY (1, 1) NOT NULL,
+    [Fauf]       INT           NOT NULL,
+    [Boat]       INT           NOT NULL,
+    [Status]     INT           NULL,
+    [DateFin]    DATETIME      NULL,
+    [Stand]      NVARCHAR (50) NULL,
+    [Version]    NVARCHAR (50) NULL,
+    CONSTRAINT [PK_Process] PRIMARY KEY CLUSTERED ([Process_ID] ASC)
+);
+
+CREATE TABLE [dbo].[Info] (
+    [Fauf]         INT           NOT NULL,
+    [Boat]         INT           NOT NULL,
+    [Position]     INT           NOT NULL,
+    [SerialNumber] NVARCHAR (50) NULL,
+    PRIMARY KEY CLUSTERED ([Fauf] ASC, [Boat] ASC, [Position] ASC)
+);
+
+CREATE TABLE [dbo].[ChargeMachine] (
+    [Process_ID] INT           NOT NULL,
+    [Position]   INT           NOT NULL,
+    [Type]       NVARCHAR (50) NOT NULL,
+    [Charge]     NVARCHAR (50) NULL,
+    CONSTRAINT [PK_ChargeMachine] PRIMARY KEY CLUSTERED ([Process_ID] ASC, [Type] ASC, [Position] ASC),
+    FOREIGN KEY ([Process_ID], [Position]) REFERENCES [dbo].[Result] ([Process_ID], [Position])
+);
+
+CREATE TABLE [dbo].[Charge] (
+    [Id]       INT           NOT NULL,
+    [Fauf]     INT           NOT NULL,
+    [Boat]     INT           NOT NULL,
+    [Position] INT           NOT NULL,
+    [Charge]   NVARCHAR (50) NULL,
+    FOREIGN KEY ([Fauf], [Boat], [Position]) REFERENCES [dbo].[Info] ([Fauf], [Boat], [Position]),
+    CONSTRAINT [PK_Charge] PRIMARY KEY CLUSTERED ([Id] ASC)
+);
+
